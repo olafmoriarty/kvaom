@@ -15,6 +15,9 @@ class scenario {
 	var $parties = array();
 	var $parties_num = 0;
 
+	var $random = false;
+	var $styringstillegg = 1;
+	
 	//-------------------//
 	//   M e t h o d s   //
 	//-------------------//
@@ -35,6 +38,33 @@ class scenario {
 
 	// ===== S ===== //
 
+	function sainte_laguë($arr, $mandates, $st = $this->styringstillegg) {
+		$num = count($arr);
+
+		$result = array();
+		$tmp_arr = array();
+		
+		for ($i = 0; $i < $this->num; $i++) {
+			$tmp_arr[$i] = $arr[$i] / $st;
+			$result[$i] = 0;
+		}
+		
+		for ($i = 0; $i < $mandates; $i++) {
+			$biggest_arr = array_keys($tmp_arr, max($tmp_arr));
+			$bc = count($biggest_arr);
+			if ($bc == 1) {
+				$biggest = $biggest_arr[0];
+			}
+			else {
+				$biggest = $biggest_arr[rand(1, $bc) - 1];
+				$this->random = true;
+			}
+			$result[$biggest]++;
+			$tmp_arr[$biggest] = $arr[$biggest] / (2 * $result[$biggest] + 1);
+		}
+		return $result;
+	}
+	
 	function set_districts($arr) {
 		if (!is_array($arr)) {
 			return false;
